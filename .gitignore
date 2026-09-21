@@ -28,7 +28,6 @@ outputs/
 
 # Presentation/documentation is kept outside this code-only project
 docs/
-README*.md
 
 # 4. OS Generated Files
 .DS_Store
