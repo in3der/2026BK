@@ -114,7 +114,7 @@ data
        ├── NoXI
        ├── RECOLA
            ├── group-1
-               ├── P25
+               ├── P25 
                ├── P26
                    ├── 1.wav
                    ├── ....
@@ -134,7 +134,7 @@ data
        ├── NoXI
        ├── RECOLA
            ├── group-1
-               ├── P25
+               ├── P25 
                ├── P26
                    ├── 1.npy
                    ├── ....
@@ -203,7 +203,7 @@ python evaluate_rewrite_weight.py --mode test --config rewrite_weight.yaml
 <summary>Qualitative comparison between our method and existing baselines (Click to expand) </summary>
 <p>
 
-The presentation figures are maintained outside this code-only repository.
+![Comparison](docs/figures/comparison.png)
 
 </p>
 </details>
@@ -229,47 +229,3 @@ We extend our sincere gratitude to the following open-source projects:
   year={2024}
 }
 ```
-
-## Integrated audio baseline
-
-The `team1/integrated-baseline` branch adds the multimodal audio-response baseline
-on top of the original PerFRDiff code. The original training/evaluation scripts
-are preserved; the new entry points are `train.py` and `infer.py`.
-
-### Environment
-
-Use the verified React CUDA environment specification:
-
-```bash
-conda env create -f requirements/environment.react.yml
-conda activate react
-```
-
-The legacy `requirements.txt` is retained for the original PerFRDiff scripts.
-
-### Data split and tests
-
-Build or refresh the conversation-level split manifest before training:
-
-```bash
-python scripts/build_split_manifest.py --output artifacts/splits/conv_id_seed42.json
-python -m unittest discover -s tests -v
-```
-
-The manifest keeps conversation IDs disjoint between train, validation, and test
-sets to avoid leakage. Dataset and checkpoint paths are supplied through the
-training/inference arguments; large datasets, checkpoints, and generated outputs
-are intentionally not committed to Git.
-
-### Training and inference
-
-Inspect all available options with:
-
-```bash
-python train.py --help
-python infer.py --help
-```
-
-For the full verified CUDA setup, use the commands documented in the team
-integration notes outside this code-only repository. A missing inference
-checkpoint fails explicitly instead of producing an untrained random sample.
