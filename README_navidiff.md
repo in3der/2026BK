@@ -11,10 +11,10 @@
 
 ```mermaid
 flowchart LR
-    A[기존 Navi 서버 코드<br/>/home/ivpl-navi/PerFRDiff] --> B[기존 GitHub<br/>JihoonCh/2026BK]
-    B --> C[jhchoi / sichoi<br/>분리 실험 코드]
-    C --> D[통합 브랜치<br/>team1/integrated-baseline]
-    D --> E[개인 fork<br/>in3der/2026BK]
+    A["기존 Navi 서버 코드<br/>/home/ivpl-navi/PerFRDiff"] --> B["기존 GitHub<br/>JihoonCh/2026BK"]
+    B --> C["jhchoi / sichoi<br/>분리 실험 코드"]
+    C --> D["통합 브랜치<br/>team1/integrated-baseline"]
+    D --> E["개인 fork<br/>in3der/2026BK"]
     E -. fork 내부 PR .-> E
 ```
 
@@ -33,16 +33,16 @@ flowchart LR
 ```mermaid
 flowchart TD
     R[원본 실험 파일들]
-    R --> D1[dataset_jhchoi.py<br/>dataset_sichoi.py]
-    R --> M1[SpeakerBehaviorEncoder_*]
-    R --> M2[ConditionalMelDecoder_*]
-    R --> P1[PersonSpecificEncoder_*]
-    R --> T1[train_* / infer_*]
-    D1 --> D2[dataset/empathy_dataset.py<br/>대화 단위 split + 멀티모달 로더]
-    M1 --> M2F[model/speaker_behavior_encoder.py<br/>3개 branch + align + fusion]
-    M2 --> M3[model/conditional_mel_decoder.py<br/>mel diffusion + vocoder 연결]
-    P1 --> P2[model/person_specific/<br/>person_specific_encoder.py]
-    T1 --> T2[train.py / infer.py<br/>유일한 통합 진입점]
+    R --> D1["dataset_jhchoi.py<br/>dataset_sichoi.py"]
+    R --> M1["SpeakerBehaviorEncoder_*"]
+    R --> M2["ConditionalMelDecoder_*"]
+    R --> P1["PersonSpecificEncoder_*"]
+    R --> T1["train_* / infer_*"]
+    D1 --> D2["dataset/empathy_dataset.py<br/>대화 단위 split + 멀티모달 로더"]
+    M1 --> M2F["model/speaker_behavior_encoder.py<br/>3개 branch + align + fusion"]
+    M2 --> M3["model/conditional_mel_decoder.py<br/>mel diffusion + vocoder 연결"]
+    P1 --> P2["model/person_specific/<br/>person_specific_encoder.py"]
+    T1 --> T2["train.py / infer.py<br/>유일한 통합 진입점"]
     D2 --> T2
     M2F --> T2
     M3 --> T2
@@ -120,18 +120,18 @@ MFCC teacher `[B,T,78] → [B,512]`는 alignment 용도로만 남아 있고, 최
 
 ```mermaid
 flowchart TD
-    ROOT[/home/sichoi/BK26_response/PerFRDiff]
-    ROOT --> ENTRY[train.py · infer.py]
-    ROOT --> DATA[dataset/ + artifacts/splits/]
-    ROOT --> MODEL[model/]
-    ROOT --> QA[tests/ + scripts/]
-    ROOT --> ENV[requirements/environment.react.yml]
-    ROOT --> LEGACY[configs/ external/ utils/<br/>기존 PerFRDiff 재사용 자산]
-    ROOT -. Git에서 제외 .-> LARGE[실제 dataset · checkpoints · outputs · wav]
-    DATA --> LOADER[empathy_dataset.py]
-    MODEL --> SBE[speaker_behavior_encoder.py]
-    MODEL --> DEC[conditional_mel_decoder.py]
-    SBE --> RUN[train / infer 실행]
+    ROOT["/home/sichoi/BK26_response/PerFRDiff"]
+    ROOT --> ENTRY["train.py · infer.py"]
+    ROOT --> DATA["dataset/ + artifacts/splits/"]
+    ROOT --> MODEL["model/"]
+    ROOT --> QA["tests/ + scripts/"]
+    ROOT --> ENV["requirements/environment.react.yml"]
+    ROOT --> LEGACY["configs/ external/ utils/<br/>기존 PerFRDiff 재사용 자산"]
+    ROOT -. Git에서 제외 .-> LARGE["실제 dataset · checkpoints · outputs · wav"]
+    DATA --> LOADER["empathy_dataset.py"]
+    MODEL --> SBE["speaker_behavior_encoder.py"]
+    MODEL --> DEC["conditional_mel_decoder.py"]
+    SBE --> RUN["train / infer 실행"]
     DEC --> RUN
     LOADER --> RUN
 ```
@@ -140,21 +140,21 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    A1[입력 Person-A 오디오<br/>B x T_mel x 80] --> E1[오디오 인코더<br/>B x T_A x 512]
-    A2[입력 Person-A 3DMM<br/>B x T_3dmm x 486] --> E2[Appearance 인코더<br/>B x T_A x 512]
-    A3[입력 Person-A AU<br/>B x T_au x 25] --> E3[Emotion 인코더<br/>B x T_A x 512]
-    E1 --> F[특징 결합<br/>B x T_A x 1536]
+    A1["입력 Person-A 오디오<br/>B x T_mel x 80"] --> E1["오디오 인코더<br/>B x T_A x 512"]
+    A2["입력 Person-A 3DMM<br/>B x T_3dmm x 486"] --> E2["Appearance 인코더<br/>B x T_A x 512"]
+    A3["입력 Person-A AU<br/>B x T_au x 25"] --> E3["Emotion 인코더<br/>B x T_A x 512"]
+    E1 --> F["특징 결합<br/>B x T_A x 1536"]
     E2 --> F
     E3 --> F
-    M[유효 구간 mask<br/>B x T_A] -. 유효하지 않은 frame 표시 .-> F
-    F --> C[Fusion MLP<br/>조건 c: B x T_A x 512]
-    S[Style id<br/>B] --> D[조건부 Mel Decoder]
-    L[감정 label<br/>B] --> D
+    M["유효 구간 mask<br/>B x T_A"] -. 유효하지 않은 frame 표시 .-> F
+    F --> C["Fusion MLP<br/>조건 c: B x T_A x 512"]
+    S["Style id<br/>B"] --> D["조건부 Mel Decoder"]
+    L["감정 label<br/>B"] --> D
     C --> D
-    D --> Y[생성 Mel<br/>B x T_out x 80]
-    Y --> H[HiFi-GAN<br/>22,050 Hz]
-    H --> W[최종 waveform<br/>B x N_audio]
-    GT[Person-B GT Mel<br/>B x T_gt x 80<br/>학습에서만 사용] -. masked loss .-> D
+    D --> Y["생성 Mel<br/>B x T_out x 80"]
+    Y --> H["HiFi-GAN<br/>22,050 Hz"]
+    H --> W["최종 waveform<br/>B x N_audio"]
+    GT["Person-B GT Mel<br/>B x T_gt x 80<br/>학습에서만 사용"] -. masked loss .-> D
 ```
 
 ### Shape 요약
@@ -183,13 +183,13 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    A[고유 conversation 10,000개] --> B[conv_id 기준 분할<br/>seed=42]
-    B --> T[Train<br/>8,500 conversations<br/>47,862 samples]
-    B --> V[Validation<br/>1,000 conversations<br/>5,640 samples]
-    B --> X[Test / Inference<br/>500 conversations<br/>2,862 samples]
-    T --> T6[각 conversation의 response style 확장]
-    V --> V6[각 conversation의 response style 확장]
-    X --> X6[각 conversation의 response style 확장]
+    A["고유 conversation 10,000개"] --> B["conv_id 기준 분할<br/>seed=42"]
+    B --> T["Train<br/>8,500 conversations<br/>47,862 samples"]
+    B --> V["Validation<br/>1,000 conversations<br/>5,640 samples"]
+    B --> X["Test / Inference<br/>500 conversations<br/>2,862 samples"]
+    T --> T6["각 conversation의 response style 확장"]
+    V --> V6["각 conversation의 response style 확장"]
+    X --> X6["각 conversation의 response style 확장"]
 ```
 
 분할 manifest는 다음 위치에 있습니다.
